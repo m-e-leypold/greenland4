@@ -1,0 +1,7 @@
+/.pyenv3
+*~
+.pytest_cache
+__pycache__
+_build
+/*.pdf
+nohup.out

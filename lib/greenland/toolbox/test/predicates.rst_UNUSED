@@ -1,0 +1,149 @@
+
+.. automodule:: greenland.toolbox.test.predicates
+
+Predicate creation
+------------------
+
+.. autofunction:: greenland.toolbox.test.predicates.test_predicate_creation2
+
+:py:func:`predicate` can be used to wrap an instance of a subclass of
+:py:class:`Predicate` around any callable:
+
+Predicates can be created by using function :py:func:`predicate` as a decorator on
+functions taking exact one argument, or wrapping such a function by using
+:py:func:`predicate` as a function.
+    
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: wrapping a callable
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Alternatively, py:func:`predicate` can be used as a decorator:
+		 
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: 'predicate' as decorator
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Predicates can also be create by subclassing :py:class:`Predicate`:
+
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: subclassing 'Predicate'
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Checking
+........
+
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: test_predicate_creation2, checking
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+
+Composition by operators
+------------------------
+
+.. autofunction:: greenland.toolbox.test.predicates.test_operators
+
+Negating with `~`:		  
+		  
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN:negation
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Conjoining with `&`:
+		 
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN:conjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Disjoining with `|`:
+		 
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN:disjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Checking
+........
+		 
+.. literalinclude:: predicates.py
+   :start-after: # CHECKING: test_operators
+   :end-before:  # END
+   :linenos:
+   :dedent:      4		 		 
+
+
+Predicates as right side operands
+---------------------------------
+
+.. autofunction:: greenland.toolbox.test.predicates.test_right_side_operators
+
+For purposes of this test, we first need an operand that is no
+predicate:
+		  
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: function operand
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Than we compose predicates with this non predicate callable as first operand:
+		 
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: right side conjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+		 
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: right side disjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Checking
+........
+		 
+.. literalinclude:: predicates.py
+   :start-after: # CHECKING: test_right_side_operators
+   :end-before:  # END
+   :linenos:
+   :dedent:      4		 		 
+
+
+Alternative Operators
+---------------------
+
+.. autofunction:: greenland.toolbox.test.predicates.test_alternative_operators
+
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: alternative conjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+.. literalinclude:: predicates.py
+   :start-after: # BEGIN: alternative disjunction
+   :end-before:  # END
+   :linenos:
+   :dedent:      4
+
+Checking
+........
+		 
+.. literalinclude:: predicates.py
+   :start-after: # CHECKING: test_alternative_operators
+   :end-before:  # END
+   :linenos:
+   :dedent:      4		 		 

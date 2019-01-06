@@ -1,0 +1,5 @@
+more-itertools
+infix
+sphinx
+mypy
+
