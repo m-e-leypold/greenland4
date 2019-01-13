@@ -3,14 +3,11 @@ Greenland: Pythonic Infrastructure
 
 (more docu in preparation)
 
-Releases
---------
+Source code is available from the `git repository`_. See
+`CHANGELOG.rst`_ for changes and release history.
 
-*0.0.1*
-  Interims release with support for high level definition of CLIs
-  (greenland.cmdline), predicates (greenland.toolbox.predicates) and
-  structs (greenland.toolbox.structs). This release is definitily
-  lacking in the documentation department.
+.. _CHANGELOG.rst:  file:CHANGELOG.rst
+.. _git repository: https://github.com/m-e-leypold/greenland4
 
 
 LICENSE

@@ -21,8 +21,10 @@
 Module `toolbox.predicates` provides a ways to compose predicates in a
 pointfree_ fashion.
 
-.. TBD test: extract (sep) example for predicate creation, predicate comp (both ways), extra examples
-.. TBD test: short circuit evaluation 
+.. TBD test: extract (sep) example for predicate creation,
+       predicate composition (both ways), extra examples
+
+.. TBD test: short circuit evaluation
 .. TBD test: AND/OR/NOT can be used on any callable returning bool
 
 .. _pointfree: https://en.wikipedia.org/wiki/Tacit_programming
@@ -34,7 +36,7 @@ pointfree_ fashion.
 ================  =========== =================== ===============   ===================
 Operation         as Operator Example             As Identifier     Example
 ================  =========== =================== ===============   ===================
-logical and       :samp:`&`   :samp:`p & q`       :samp:`<<AND>>`   :samp:`p <<AND>> q` 
+logical and       :samp:`&`   :samp:`p & q`       :samp:`<<AND>>`   :samp:`p <<AND>> q`
 logical or        :samp:`|`   :samp:`p | q`       :samp:`<<OR>>`    :samp:`p <<OR>>`
 logical negation  :samp:`~`   :samp:`~p`          :samp:`NOT`       :samp:`NOT(p)`
 ================  =========== =================== ===============   ===================
@@ -46,8 +48,9 @@ not a restriction).
 .. For more information see: predicates.rst
 """
 
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from infix import shift_infix as infix
+
 
 class Predicate (object):
 
@@ -66,67 +69,76 @@ class Predicate (object):
     .. automethod:: __call__
 
     """
-    
+
     @abstractmethod
-    def __call__(self,subject):
+    def __call__(self, subject):
         """Overwrite this method to implement the application of predicate to `subject`."""
 
     @abstractmethod
-    def __init__(self,*pargs,**kwargs):
+    def __init__(self, *pargs, **kwargs):
         """Overwrite this method to capture parameters at predicate construction."""
-    
-    def __or__(self,term2):
-        return Disjunction(self,term2)
 
-    def __and__(self,term2):
-        return Conjunction(self,term2)
+    def __or__(self, term2):
+        return Disjunction(self, term2)
+
+    def __and__(self, term2):
+        return Conjunction(self, term2)
 
     def __invert__(self):
         return Negation(self)
 
-    def __ror__(self,term1):
-        return Disjunction(term1,self)
+    def __ror__(self, term1):
+        return Disjunction(term1, self)
 
-    def __rand__(self,term1):
-        return Conjunction(term1,self)
+    def __rand__(self, term1):
+        return Conjunction(term1, self)
 
-        
+
 class Conjunction (Predicate):
-    
-    def __init__(self,term1,term2):
+
+    def __init__(self, term1, term2):
         self.term1 = term1
         self.term2 = term2
 
-    def __call__(self,subject):
-        if self.term1(subject): return self.term2(subject)
-        else: return False
+    def __call__(self, subject):
+        if self.term1(subject):
+            return self.term2(subject)
+        else:
+            return False
+
 
 class Disjunction (Predicate):
-    
-    def __init__(self,term1,term2):
+
+    def __init__(self, term1, term2):
         self.term1 = term1
         self.term2 = term2
 
-    def __call__(self,subject):
-        if self.term1(subject): return True
-        else: return self.term2(subject)
+    def __call__(self, subject):
+        if self.term1(subject):
+            return True
+        else:
+            return self.term2(subject)
+
 
 class Negation (Predicate):
-    def __init__(self,term):
+    def __init__(self, term):
         self.term = term
 
-    def __call__(self,subject):
+    def __call__(self, subject):
         return not(self.term(subject))
-        
-class PredicateFromFunction ( Predicate ):
-    
-    def __init__(self,pred):
+
+
+class PredicateFromFunction (Predicate):
+
+    def __init__(self, pred):
         self.pred = pred
-    def __call__(self,subject): return self.pred(subject)
-        
+
+    def __call__(self, subject):
+        return self.pred(subject)
+
 
 def predicate(pred):
-    
+
     """
     Decorator or function to turn a callable into a predicate.
 
@@ -139,28 +151,28 @@ def predicate(pred):
        :linenos:
        :dedent:      4
     """
-    
+
     return PredicateFromFunction(pred)
 
 
 @infix
-def AND(a,b):
+def AND(a, b):
 
     """Standalone composition operator <<AND>>"""
-    
-    return Conjunction(a,b)
+
+    return Conjunction(a, b)
+
 
 @infix
-def OR(a,b):
+def OR(a, b):
 
     """Standalone composition operator <<OR>>"""
-    
-    return Disjunction(a,b)
+
+    return Disjunction(a, b)
+
 
 def NOT(a):
 
     """Standalone negation operator 'NOT'"""
-    
+
     return Negation(a)
-
-

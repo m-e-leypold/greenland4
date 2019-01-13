@@ -28,7 +28,9 @@ Documentation License".
    about   
    greenland/index
    greenland/toolbox/index
+   CHANGELOG
    appendices
+   
    
    
 Indices and tables

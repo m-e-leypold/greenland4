@@ -1,5 +1,18 @@
+# -- virtualenv
+
+pip  # --upgrade
+
+# -- installation
+
 more-itertools
 infix
+
+# -- development
+
 sphinx
 mypy
-
+flake8
+setuptools
+sdist
+wheel
+twine

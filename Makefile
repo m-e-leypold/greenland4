@@ -31,6 +31,11 @@ typecheck:
 	MYPYPATH=$(wildcard .pyenv3/lib/python3.*/site-packages) mypy --follow-imports=silent $(PY-SOURCES)
 	@echo
 
+flake8check:
+	@echo
+	flake8 --ignore=E501,E251,E221 lib
+	@echo
+
 doc::
 	cd lib && make latexpdf
 	cd lib && make html
@@ -45,6 +50,7 @@ cleaner:: clean
 	find . -name '*.egg-info' -type d    | xargs rm -rf
 	find . -name '.pytest_cache' -type d | xargs rm -rf
 	find . -name '*__pycache__*' -type d | xargs rm -rf
+	rm -rf dist build lib/.mypy_cache
 
 install-linked::
 	pip install -e .

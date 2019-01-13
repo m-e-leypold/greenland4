@@ -25,7 +25,6 @@ with open("README.rst", "r") as fh:
 exclude = ['test','tests','example','examples','demo','demos']
 def is_excluded(p):
     for suffix in exclude:
-        print(p[-len(suffix)-1:])
         if p[-len(suffix)-1:] == "."+suffix: return True
     return False
 
@@ -35,18 +34,18 @@ loc_suffix = "+T"+datetime.datetime.strftime(datetime.datetime.now(),"%Y%m%d%H%M
 
 setuptools.setup(
     name="greenland",
-    version="0.0.1", # + loc_suffix,
+    version="0.0.4", # + loc_suffix,
     author="Markus E Leypold",
     author_email="greenland-4sda212@m-e-leypold.de",
     description="A pythonic scripting environment",
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    url="https://github.com/m-e-leypold/greenland3",
+    long_description_content_type="text/x-rst",
+    url="https://github.com/m-e-leypold/greenland4",
     packages=packages,
     package_dir={ '': 'lib' },
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GPL License",
+        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Operating System :: OS Independent",
-    ),
+    ],
 )

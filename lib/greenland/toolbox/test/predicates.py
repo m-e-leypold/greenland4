@@ -24,6 +24,7 @@ This suite test :py:mod:`toolbox.predicates`.
 .. For more information, see: predicates.rst
 """
 
+
 def create_predicates():
 
     """
@@ -33,13 +34,13 @@ def create_predicates():
     from greenland.toolbox.predicates import predicate, Predicate
 
     #                                          # BEGIN: wrapping a callable
-    odd   = predicate( lambda x: x%2 == 1 )    # wrapping a callable
+    odd   = predicate(lambda x: x % 2 == 1)    # wrapping a callable
     #                                          # END.
 
     #                                          # BEGIN: 'predicate' as decorator
     @predicate                                 # 'predicate' as decorator
-    def even (x):
-        return x%2 == 0
+    def even(x):
+        return x % 2 == 0
     #                                          # END
 
     #                                          # BEGIN: subclassing 'Predicate'
@@ -52,11 +53,10 @@ def create_predicates():
             return (value % self.divisor) == 0
     #                                          # END
 
-
     #                                          # EXAMPLE:greater
-    class greater( Predicate):                 
+    class greater(Predicate):
 
-        def __init__(self,limit):
+        def __init__(self, limit):
             self.limit = limit
 
         def __call__(self, value):
@@ -64,7 +64,6 @@ def create_predicates():
     #                                          # END
 
     return odd, even, dividable_by, greater
-
 
 
 def test_predicate_creation2():
@@ -79,45 +78,46 @@ def test_predicate_creation2():
 
     odd, even, dividable_by, greater = create_predicates()
 
-    #                                   # BEGIN: test_predicate_creation2, checking    
+    #                                   # BEGIN: test_predicate_creation2, checking
     assert even(16)
     assert not even(19)
 
     assert odd(17)
     assert not odd(20)
 
-    assert dividable_by(3) (6)          # that looks strange
+    assert (dividable_by(3))(6)         # that looks strange
 
     dividable_by_3 = dividable_by(3)    # will look better with that
 
-    assert dividable_by_3 (6)
-    assert not (dividable_by_3 (7))
+    assert dividable_by_3(6)
+    assert not dividable_by_3(7)
 
-    assert greater(5) (6)
+    assert (greater(5))(6)
     #                                   # END
 
 
-
 def compose_predicates():
-    
+
     _, even, dividable_by, greater = create_predicates()
-    
+
     #                                      # BEGIN:negation
-    def less(x): return ~ greater(x-1)
+    def less(x):
+        return ~ greater(x - 1)
     #                                      # END
 
     #                                      # BEGIN:conjunction
-    def in_range(x,y):
+    def in_range(x, y):
         return (~less(x)) & (~greater(y))
     #                                      # END
-    
-    #                                      # BEGIN:disjunction
-    def in_range2(x,y): return ~(less(x) | greater(y))
-    #                                      # END
-    
-    #                                      # BEGIN: test_operators, checking        
 
-    return less, in_range,in_range2
+    #                                      # BEGIN:disjunction
+    def in_range2(x, y):
+        return ~(less(x) | greater(y))
+    #                                      # END
+
+    #                                      # BEGIN: test_operators, checking
+
+    return less, in_range, in_range2
 
 
 def test_operators():
@@ -127,32 +127,31 @@ def test_operators():
     operators.
     """
 
-    from greenland.toolbox.predicates import Predicate
-    
     less, in_range, in_range2 = compose_predicates()
 
     #                                      # CHECKING: test_operators
-    assert less(5) (3)
-    assert not (less(5) (6))
+    assert (less(5))(3)
+    assert not (less(5)(6))
 
-    assert in_range(12,16) (16)
-    assert in_range(12,16) (12)
-    assert in_range(12,16) (15)
+    assert in_range(12, 16)(16)
+    assert in_range(12, 16)(12)
+    assert in_range(12, 16)(15)
 
-    assert not (in_range(12,16) (11))
-    assert not (in_range(12,16) (17))
+    assert not (in_range(12, 16)(11))
+    assert not (in_range(12, 16)(17))
 
-    assert in_range2(12,16) (16)
-    assert in_range2(12,16) (12)
-    assert in_range2(12,16) (15)
+    assert in_range2(12, 16)(16)
+    assert in_range2(12, 16)(12)
+    assert in_range2(12, 16)(15)
 
-    assert not (in_range2(12,16) (11))
-    assert not (in_range2(12,16) (17))
+    assert not (in_range2(12, 16)(11))
+    assert not (in_range2(12, 16)(17))
 
     #                                      # END
 
+
 def test_right_side_operators():
-    
+
     """
     This test tests composition with the bitwise operators in case the
     left side operand do not derive from :py:class:`Predicate`, thus
@@ -160,38 +159,36 @@ def test_right_side_operators():
     those cases goes over the method `__rand__` or `__ror__` respectively of the
     right side operand.
     """
-    
-    _, in_range, _ = compose_predicates()    
 
-    
+    _, in_range, _ = compose_predicates()
+
     #                                   # BEGIN: function operand
-    def odd(x): return (x%2==1)         # a function, no instance of predicate
+    def odd(x):                         # a function, no instance of predicate
+        return (x % 2 == 1)
     #                                   # END
 
     #                                   # BEGIN: right side conjunction
-    def odd_and_in_range(x,y):
-        return odd & in_range(x,y)  
+    def odd_and_in_range(x, y):
+        return odd & in_range(x, y)
     #                                   # END
 
     #                                   # BEGIN: right side disjunction
-    def odd_or_in_range(x,y):
-        return odd | in_range(x,y)
+    def odd_or_in_range(x, y):
+        return odd | in_range(x, y)
     #                                   # END
 
-    
     #                                          # CHECKING: test_right_side_operators
-    assert( callable(odd_and_in_range))
-    
-    assert odd_and_in_range(12,16)      (13)   # both (internal) operands true
-    assert not (odd_and_in_range(12,16) (12))  # in_range false
-    assert not (odd_and_in_range(12,16) (11))  # in_range true
+    assert(callable(odd_and_in_range))
 
-    assert( callable(odd_or_in_range))
+    assert odd_and_in_range(12, 16)(13)        # both (internal) operands true
+    assert not (odd_and_in_range(12, 16)(12))  # in_range false
+    assert not (odd_and_in_range(12, 16)(11))  # in_range true
 
-    
-    assert (not odd_or_in_range(12,16) (10))   # both (internal) operands false
-    assert odd_or_in_range(12,16)      (12)    # in_range true
-    assert odd_or_in_range(12,16)      (11)    # odd true
+    assert(callable(odd_or_in_range))
+
+    assert (not odd_or_in_range(12, 16)(10))   # both (internal) operands false
+    assert odd_or_in_range(12, 16)(12)         # in_range true
+    assert odd_or_in_range(12, 16)(11)         # odd true
     #                                          # END
 
 
@@ -200,7 +197,7 @@ def test_alternative_operators():
     """
     This test checks the alternative operators :code:`NOT`, :code:`<<AND>>` and :code:`<<OR>>`.
     """
-    
+
     _, _, _, greater = create_predicates()
     less, _, _       = compose_predicates()
 
@@ -209,15 +206,15 @@ def test_alternative_operators():
     # The operator '<<AND>>' means conjunction, 'NOT' means negation.
 
     #                                               # BEGIN: alternative conjunction
-    def in_range3(x,y):
-        return NOT(less(x)) <<AND>> NOT(greater(y))
-    #                                               # END 
+    def in_range3(x, y):
+        return NOT(less(x)) <<AND>> NOT(greater(y)) # 
+    #                                               # END
 
     #                                               # BEGIN: alternative disjunction
-    def in_range4(x,y):
-        return NOT (less(x) <<OR>> greater(y))
+    def in_range4(x, y):
+        return NOT (less(x) <<OR>> greater(y))      #
     #                                               # END
-    
+
     #                                               # CHECKING: test_alternative_operators
     assert in_range3(12,16) (16)
     assert in_range3(12,16) (12)
@@ -233,4 +230,3 @@ def test_alternative_operators():
     assert not (in_range4(12,16) (11))
     assert not (in_range4(12,16) (17))
     #                                               # END
-    
