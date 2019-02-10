@@ -34,7 +34,7 @@ loc_suffix = "+T"+datetime.datetime.strftime(datetime.datetime.now(),"%Y%m%d%H%M
 
 setuptools.setup(
     name="greenland",
-    version="0.0.4", # + loc_suffix,
+    version="0.0.5", # + loc_suffix,
     author="Markus E Leypold",
     author_email="greenland-4sda212@m-e-leypold.de",
     description="A pythonic scripting environment",

@@ -17,9 +17,27 @@ Changelog
 Unreleased
 ==========
 
-(nothing to see here)
 
+Release 0.0.5_
+==============
 
+URL: `https://github.com/m-e-leypold/greenland4/release/0.0.5 <0.0.5_>`_
+
+.. _0.0.5: https://github.com/m-e-leypold/greenland4/releases/tag/release%2F0.0.5
+
+- [NEW]: "Master" Regex (greenland.parsing.master_regex): Use a list of
+  regular expression to match against a string, dependend on regular
+  expression matching dispatch to constructor and return constructed
+  item.
+- Using a local temporary directory for test fixures now (--basetemp)
+- Known Bugs: 190119a. 
+- [NEW] fileystem.trees: Object model for filesystem traversal,
+  methods for finding files.
+- [NEW] fileystem.find: Finding files and directories, useful
+  predicates on filesystem objects.
+- More documentation in README.rst and about.rst. A simple example to
+  showcase what Greenland can provide so far.
+  
 Release 0.0.4_
 ==============
 

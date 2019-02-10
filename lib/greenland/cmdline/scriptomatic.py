@@ -1,4 +1,4 @@
-# * Copyright (C) 2018 M E Leypold, GPL3-or-later licensed -----------------------|
+# * Copyright (C) 2018 M E Leypold, GPL3-or-later licensed  --------------------|
 #
 #     greenland.cmdline.scriptomatic -- CLIs to a single module level procedure
 #     Copyright (C) 2018 M E Leypold
@@ -16,6 +16,8 @@
 #     You should have received a copy of the GNU General Public License
 #     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
+# * Scriptomatic  --------------------------------------------------------------|
 
 from .specification2 import Option,Flag,Required,Optional,no_variadic, Variadic
 from greenland.conventions import UserError, longstr

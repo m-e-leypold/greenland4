@@ -1,0 +1,94 @@
+#!/usr/bin/env python3
+# * Copyright (C) 2018 M E Leypold, GPL3-or-later licensed ------------------------|
+#
+#   greenland.cmdline.parsers -- Commandline parser primitives and combinators
+#   Copyright (C) 2018 M E Leypold
+#
+#   This program is free software: you can redistribute it and/or
+#   modify it under the terms of the GNU General Public License as
+#   published by the Free Software Foundation, either version 3 of the
+#   License, or (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program.  If not, see
+#   <https://www.gnu.org/licenses/>.
+#
+
+"""An example for using greenland (filesystem and cmdline)."""
+
+# * Implementation ----------------------------------------------------------------|
+
+from greenland.cmdline.shellcommands \
+    import ShellCommand, Flag, Required, Optional
+
+from greenland.filesystem.find import find_files, matches
+
+from fnmatch import fnmatch
+
+import logging
+import os
+import sys
+
+class RmInTree (ShellCommand):
+
+    """Remove in a directory tree all files matching a pattern.
+
+    Usage: rm-in-tree [-v] [-n] $PATTERN [$PATH]
+
+    Traverse $PATH and delete all files matching $PATTERN.
+
+      -v          Verbose logging to stderr.
+ 
+      -n          Dry run. Do not delete, only log.
+
+      $PATTERN    Shell style wildcard pattern which the base names of the files
+                  need to match.
+
+      $PATH       Directory tree to traverse to find files to be deleted. The
+                  default is the current working directory.
+    """
+
+    #                                                                 # [manual] begin usage
+    
+    usage = [
+        Flag     (  'verbose', ['v'], "enable verbose logging" ),
+        Flag     (  'dry-run', ['n'], "dry run", key='dry_run' ),
+        
+        Required ( 'pattern', str,
+                   "shell style wildcard pattern for the names of files to delete"
+        ),
+        Optional( 'root', str, "directory where to start")
+        
+    ]
+
+    #                                                                 # [manual] end usage
+
+    def main(self,pattern,root='.'):
+        
+        loglevel = logging.INFO if self.verbose else logging.ERROR
+        
+        logging.basicConfig(
+            format='%(levelname)s: %(message)s',
+            level = loglevel
+        )
+
+        logging.info("Using file name pattern: '%s'.", pattern)
+        logging.info("Traversing tree: '%s'.", root)
+        logging.info("Dry run: %s.", self.dry_run)
+
+        #                                                                 # [manual] begin find_files
+        for obj in find_files(root, accept = matches(pattern)):
+            
+            logging.info("Found: %s",obj.relpath)
+            
+            if not self.dry_run:
+                logging.info("Deleting: '%s'",obj.path)                
+                os.unlink(obj.path)
+        #                                                                 # [manual] end find_files                
+                
+if __name__ == '__main__': RmInTree()

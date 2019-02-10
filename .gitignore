@@ -5,3 +5,5 @@ __pycache__
 _build
 /*.pdf
 nohup.out
+.tmp
+/.mypy_cache

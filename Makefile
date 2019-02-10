@@ -24,7 +24,7 @@ PY-SOURCES = $(shell find lib/greenland -name '*.py' | grep -v '/test/' | grep -
 check:: pytest typecheck
 
 pytest:: 
-	cd lib && pytest
+	cd lib && pytest --basetemp="$(CURDIR)/.tmp"
 
 typecheck:
 	@echo
@@ -45,6 +45,8 @@ clean::
 	find . \( -name '.pyenv*' -type d -prune \) -o \( \( -name __pycache__ -o -name .pytest_cache \) -a -print \) | xargs rm -rf
 	rm -rf .build
 	cd lib && make clean
+
+	find . -name '.tmp' | xargs rm -rf
 
 cleaner:: clean
 	find . -name '*.egg-info' -type d    | xargs rm -rf
